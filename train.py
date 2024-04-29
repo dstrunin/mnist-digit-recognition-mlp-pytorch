@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 # Define the paths to the MNIST dataset files
 data_path = './data'
@@ -25,6 +26,32 @@ def load_mnist(data_path, images_file, labels_file):
 
     return images, labels
 
+# Function to visualize MNIST samples
+def visualize_samples(images, labels, num_samples=10):
+    fig, axes = plt.subplots(1, num_samples, figsize=(num_samples * 2, 2))
+    for i in range(num_samples):
+        ax = axes[i]
+        ax.imshow(images[i].reshape(28, 28), cmap='gray')
+        ax.set_title(f'Label: {labels[i]}')
+        ax.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+# Function to visualize model predictions
+def visualize_predictions(model, images, labels, num_samples=10):
+    model.eval()
+    with torch.no_grad():
+        outputs = model(images[:num_samples])
+        _, predicted = torch.max(outputs.data, 1)
+
+    fig, axes = plt.subplots(1, num_samples, figsize=(num_samples * 2, 2))
+    for i in range(num_samples):
+        ax = axes[i]
+        ax.imshow(images[i].reshape(28, 28), cmap='gray')
+        ax.set_title(f'Predicted: {predicted[i]}\nActual: {labels[i]}')
+        ax.axis('off')
+    plt.tight_layout()
+    plt.show()
 
 # Load the MNIST dataset from local files
 train_images, train_labels = load_mnist(data_path, train_images_file, train_labels_file)
@@ -64,6 +91,9 @@ model = MNISTClassifier()
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+# Visualize some training samples
+visualize_samples(train_images[:10], train_labels[:10])
+
 # Training loop
 epochs = 10
 for epoch in range(epochs):
@@ -89,3 +119,8 @@ with torch.no_grad():
         correct += (predicted == labels).sum().item()
 
 print(f'Test Accuracy: {100 * correct / total:.2f}%')
+
+test_images_tensor = torch.from_numpy(test_images[:10]).float()
+test_labels_tensor = torch.from_numpy(test_labels[:10]).long()
+visualize_predictions(model, test_images_tensor, test_labels_tensor)
+
