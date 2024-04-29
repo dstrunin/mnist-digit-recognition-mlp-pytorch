@@ -62,11 +62,11 @@ python train.py
 
 4. The trained model will be saved as `mnist_mlp.pth`, and the ONNX model will be exported as `mnist_mlp.onnx`.
 
-5. Visualize the model architecture using Netron or other visualization tools by opening the `mnist_mlp.onnx` file.
+5. Visit http://localhost:8080 to browse through the visualization data on Netron.
 
 ## Results
 
-The trained MLP model achieves an accuracy of over 95% on the MNIST test set. The visualization of the model architecture provides insights into the network structure and the flow of data through the layers.
+The trained MLP model achieves an accuracy of over 97% on the MNIST test set. The visualization of the model architecture provides insights into the network structure and the flow of data through the layers.
 
 ## License
 
